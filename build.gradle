@@ -1,0 +1,32 @@
+plugins {
+    id 'java-library'
+}
+
+group 'com.astroimagej'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    //todo don't need all of these
+    api "org.hipparchus:hipparchus-core:${project.hipparchus_version}"
+    api "org.hipparchus:hipparchus-clustering:${project.hipparchus_version}"
+    api "org.hipparchus:hipparchus-fft:${project.hipparchus_version}"
+    api "org.hipparchus:hipparchus-fitting:${project.hipparchus_version}"
+    api "org.hipparchus:hipparchus-geometry:${project.hipparchus_version}"
+    api "org.hipparchus:hipparchus-ode:${project.hipparchus_version}"
+    api "org.hipparchus:hipparchus-optim:${project.hipparchus_version}"
+    api "org.hipparchus:hipparchus-stat:${project.hipparchus_version}"
+
+    api group: 'com.github.haifengl', name: 'smile-math', version: '2.+'//not used
+    implementation 'net.sourceforge.f2j:arpack_combined_all:0.1'
+}
+
+test {
+    useJUnitPlatform()
+}
