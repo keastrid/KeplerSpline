@@ -288,6 +288,10 @@ public class KeplerSpline {
         return chooseKeplerSpline(allTime, allFlux, bkSpaces, maxIter, penaltyCoeff, verbose, null);
     }
 
+    public static Pair<RealVector, SplineMetadata> chooseKeplerSplineV2(RealVector time, RealVector flux) {
+        return chooseKeplerSplineV2(time, flux, null, null, null, null, null, false);
+    }
+
     public static Pair<RealVector, SplineMetadata> chooseKeplerSplineV2(RealVector time, RealVector flux, Double bkSpaceMin, Double bkSpaceMax,
                                                                         Integer bkSpaceNum, RealVector inputMask, Double gapWidthIn, boolean returnMetadata) {
         if (bkSpaceNum == null) {
@@ -328,6 +332,10 @@ public class KeplerSpline {
 
         //todo how to handle - python merges the list into one array for metadata
         return new Pair<>(spline, metadata);
+    }
+
+    public static Pair<RealVector, SplineMetadata> keplerSplineV2(RealVector time, RealVector flux) {
+        return keplerSplineV2(time, flux, null, null, null, false);
     }
 
     public static Pair<RealVector, SplineMetadata> keplerSplineV2(RealVector time, RealVector flux, Double bkSpace, RealVector inputMask,

@@ -17,11 +17,15 @@ public class Main {
         var t = BSpline.iterFit(makeXForIter(), makeYForIter(), kargs);
         var t1 = t.first().value(makeXForIter(), null, null, null, null).first();
 
+        System.out.println(Arrays.toString(Util.uniq(MatrixUtils.createRealVector(new double[]{3, 3, 3, 3}), null)));
+
         try {
             var ts = readTime();
             var fs = readFlux();
-            var s = KeplerSpline.keplerSplineV2(ts, fs, null, null, null, false);
-            System.out.println(s.first());
+            var s = KeplerSpline.keplerSplineV2(ts, fs, null, null, null, false);//working
+            //var s = KeplerSpline.keplerSplineV2(ts, fs, 2.3633148268427435, null, null, false);
+            var s1 = KeplerSpline.chooseKeplerSplineV2(ts, fs);
+            System.out.println(s1.first());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

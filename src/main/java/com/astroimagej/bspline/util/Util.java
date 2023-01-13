@@ -328,10 +328,17 @@ public class Util {
             sorted = takeIndices(x, indices);
         }
 
-        return IntStream.range(0, sorted.getDimension()) // Generate all indices of the vector
+        var o = IntStream.range(0, sorted.getDimension()) // Generate all indices of the vector
                 // compare 2 continuous elements of vector, comparing first element with the last one
                 .filter(i -> sorted.getEntry(i) != sorted.getEntry(Math.floorMod(i+1, sorted.getDimension())))
                 .toArray();
+
+        // Handle case of all elements being identical
+        if (o.length == 0) {
+            return new int[]{sorted.getDimension() - 1};
+        }
+
+        return o;
     }
 
     public static RealVector where(DoublePredicate condition, RealVector source, RealVector x, RealVector y) {

@@ -108,7 +108,7 @@ public class BSpline {
         var upper = t.c();
         var foo = MatrixUtils.createRealMatrix(invVar.getDimension(), bw);
         for (int i = 0; i < bw; i++) {
-            foo.setColumnVector(i, invVar);//todo check
+            foo.setColumnVector(i, invVar);
         }
 
 
@@ -123,6 +123,7 @@ public class BSpline {
             bo = bo.append(MatrixUtils.createRealVector(IntStream.range(0, bw-k).map(i -> i+(bw)* finalK).mapToDouble(i -> i).toArray()));
         }
 
+        var alphaTFlatMap = new Util.TransposeFlatMap(alpha);
         for (int k = 0; k < nn - nOrd + 1; k++) {
             var iTop = k*nPoly;
             var iBottom = Math.min(iTop, nFull) + bw - 1;
@@ -132,13 +133,11 @@ public class BSpline {
                         .transposeMultiply(a2.getSubMatrix(IntStream.range((int) lower.getEntry(k), (int) (upper.getEntry(k)+1)).toArray(), IntStream.range(0, a2.getColumnDimension()).toArray()));
                 var wb = a2.getSubMatrix(IntStream.range((int) lower.getEntry(k), (int) (upper.getEntry(k)+1)).toArray(), IntStream.range(0, a2.getColumnDimension()).toArray()).preMultiply(yData.getSubVector((int) lower.getEntry(k), (int) (upper.getEntry(k)+1-lower.getEntry(k))));
 
-                var tm = new Util.TransposeFlatMap(alpha);
                 var flatWork = Util.flatten(work, Util.Direction.ROW);
                 var t2 = bo.mapAdd(iTop*bw);
                 for (int i = 0; i < bi.getDimension(); i++) {
-                    tm.set((int) t2.getEntry(i), tm.get((int) t2.getEntry(i)) + flatWork.getEntry((int) bi.getEntry(i)));
+                    alphaTFlatMap.set((int) t2.getEntry(i), alphaTFlatMap.get((int) t2.getEntry(i)) + flatWork.getEntry((int) bi.getEntry(i)));
                 }
-
 
                 var t1 = IntStream.rangeClosed(iTop, (int) (iBottom+1)).toArray();
                 for (int i = 0; i < wb.getDimension(); i++) {
@@ -147,7 +146,7 @@ public class BSpline {
             }
         }
         var minInfluence = 1.0e-10 * Util.sum(invVar) / nFull;
-        var errb = BSplineUtil.exofastCholeskyBand(alpha.copy(), minInfluence);//todo broken
+        var errb = BSplineUtil.exofastCholeskyBand(alpha.copy(), minInfluence);
         RealMatrix a;
         if (errb.first()[0] == -1) {
             a = errb.second();
