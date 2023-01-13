@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 group 'com.astroimagej'
@@ -9,22 +10,35 @@ repositories {
     mavenCentral()
 }
 
+java {
+    toolchain {
+        // Gradle will download the JDK for compiling/running if one isn't found
+        // This should prevent anyone from using an outdated JDK
+        languageVersion.set(JavaLanguageVersion.of(16))
+    }
+}
+
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 
     //todo don't need all of these
-    api "org.hipparchus:hipparchus-core:${project.hipparchus_version}"
-    api "org.hipparchus:hipparchus-clustering:${project.hipparchus_version}"
-    api "org.hipparchus:hipparchus-fft:${project.hipparchus_version}"
-    api "org.hipparchus:hipparchus-fitting:${project.hipparchus_version}"
-    api "org.hipparchus:hipparchus-geometry:${project.hipparchus_version}"
-    api "org.hipparchus:hipparchus-ode:${project.hipparchus_version}"
-    api "org.hipparchus:hipparchus-optim:${project.hipparchus_version}"
-    api "org.hipparchus:hipparchus-stat:${project.hipparchus_version}"
+    implementation "org.hipparchus:hipparchus-core:${project.hipparchus_version}"
+    //api "org.hipparchus:hipparchus-clustering:${project.hipparchus_version}"
+    //api "org.hipparchus:hipparchus-fft:${project.hipparchus_version}"
+    //api "org.hipparchus:hipparchus-fitting:${project.hipparchus_version}"
+    //api "org.hipparchus:hipparchus-geometry:${project.hipparchus_version}"
+    //api "org.hipparchus:hipparchus-ode:${project.hipparchus_version}"
+    //api "org.hipparchus:hipparchus-optim:${project.hipparchus_version}"
+    implementation "org.hipparchus:hipparchus-stat:${project.hipparchus_version}"
 
-    api group: 'com.github.haifengl', name: 'smile-math', version: '2.+'//not used
+    implementation group: 'com.github.haifengl', name: 'smile-math', version: '2.+'//not used
     implementation 'net.sourceforge.f2j:arpack_combined_all:0.1'
+}
+
+// Minimizing an shadow JAR
+shadowJar {
+    minimize()
 }
 
 test {
