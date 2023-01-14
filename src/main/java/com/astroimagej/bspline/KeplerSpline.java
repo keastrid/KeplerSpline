@@ -371,14 +371,14 @@ public class KeplerSpline {
     }
 
 
-    private static class SplineMetadata {
-        Collection<RealVector> lightCurveMask = null;
-        Collection<RealVector> inputLightCurveMask = null;
-        Double bkSpace = null;
-        Collection<Double> badBkspaces = new ArrayList<>();
-        Double likelihoodTerm = null;
-        Double penaltyTerm = null;
-        Double bic = null;
+    public static class SplineMetadata {
+        public Collection<RealVector> lightCurveMask = null;
+        public Collection<RealVector> inputLightCurveMask = null;
+        public Double bkSpace = null;
+        public Collection<Double> badBkspaces = new ArrayList<>();
+        public Double likelihoodTerm = null;
+        public Double penaltyTerm = null;
+        public Double bic = null;
     }
 
     private static class InsufficientPointsError extends IllegalArgumentException {
