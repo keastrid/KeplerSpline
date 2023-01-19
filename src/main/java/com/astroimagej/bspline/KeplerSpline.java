@@ -141,7 +141,7 @@ public class KeplerSpline {
     }
 
     private static Pair<Collection<RealVector>, SplineMetadata> chooseKeplerSpline(Collection<RealVector> allTime, Collection<RealVector> allFlux,
-                                           double[] bkSpaces, Integer maxIter, Double penaltyCoeff,
+                                           double[] bkSpaces, Integer maxIter, Double outlierCut, Double penaltyCoeff,
                                            boolean verbose, Collection<RealVector> allInputMask) {
         if (maxIter == null) {
             maxIter = 5;
@@ -196,7 +196,7 @@ public class KeplerSpline {
                 var thisInputMask = allInputMask2.get(i);
 
                 try {
-                    var t = keplerSpline(time.copy(), flux.copy(), bkSpace, maxIter, null, thisInputMask.copy());
+                    var t = keplerSpline(time.copy(), flux.copy(), bkSpace, maxIter, outlierCut, thisInputMask.copy());
                     splinePiece = t.first();
                     mask = t.second();
                 } catch (InsufficientPointsError e) {
@@ -285,15 +285,16 @@ public class KeplerSpline {
         }
 
         var bkSpaces= Util.logSpace(Math.log10(bkSpaceMin), Math.log10(bkSpaceMax), bkSpaceNum);
-        return chooseKeplerSpline(allTime, allFlux, bkSpaces, maxIter, penaltyCoeff, verbose, null);
+        return chooseKeplerSpline(allTime, allFlux, bkSpaces, maxIter, penaltyCoeff, null, verbose, null);
     }
 
     public static Pair<RealVector, SplineMetadata> chooseKeplerSplineV2(RealVector time, RealVector flux) {
-        return chooseKeplerSplineV2(time, flux, null, null, null, null, null, false);
+        return chooseKeplerSplineV2(time, flux, null, null, null, null, null, null, null, false);
     }
 
     public static Pair<RealVector, SplineMetadata> chooseKeplerSplineV2(RealVector time, RealVector flux, Double bkSpaceMin, Double bkSpaceMax,
-                                                                        Integer bkSpaceNum, RealVector inputMask, Double gapWidthIn, boolean returnMetadata) {
+                                                                        Integer bkSpaceNum, RealVector inputMask, Double gapWidthIn,
+                                                                        Integer maxIter, Double outlierCut, boolean returnMetadata) {
         if (bkSpaceNum == null) {
             bkSpaceNum = 20;
         }
@@ -324,7 +325,7 @@ public class KeplerSpline {
 
         var bkSpaces = Util.logSpace(Math.log10(bkSpaceMin), Math.log10(bkSpaceMax), bkSpaceNum);
 
-        var t1 = chooseKeplerSpline(allTime, allFlux, bkSpaces, null, null, false, allInputMask);
+        var t1 = chooseKeplerSpline(allTime, allFlux, bkSpaces, maxIter, outlierCut, null, false, allInputMask);
         var splines = t1.first();
         var metadata = t1.second();
 
@@ -335,11 +336,12 @@ public class KeplerSpline {
     }
 
     public static Pair<RealVector, SplineMetadata> keplerSplineV2(RealVector time, RealVector flux) {
-        return keplerSplineV2(time, flux, null, null, null, false);
+        return keplerSplineV2(time, flux, null, null, null, null, null, false);
     }
 
     public static Pair<RealVector, SplineMetadata> keplerSplineV2(RealVector time, RealVector flux, Double bkSpace, RealVector inputMask,
-                                                                  Double gapWidthIn, boolean returnMetadata) {
+                                                                  Double gapWidthIn, Integer maxIter, Double outlierCut,
+                                                                  boolean returnMetadata) {
         if (bkSpace == null) {
             bkSpace = 1.5;
         }
@@ -360,7 +362,7 @@ public class KeplerSpline {
         var allTime2 = t.first();
         var allInputMask = t.second();
 
-        var t1 = chooseKeplerSpline(allTime, allFlux, new double[]{bkSpace}, null, null, false, allInputMask);
+        var t1 = chooseKeplerSpline(allTime, allFlux, new double[]{bkSpace}, maxIter, outlierCut, null, false, allInputMask);
         var splines = t1.first();
         var metadata = t1.second();
 

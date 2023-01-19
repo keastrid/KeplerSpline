@@ -22,7 +22,7 @@ public class Main {
         try {
             var ts = readTime();
             var fs = readFlux();
-            var s = KeplerSpline.keplerSplineV2(ts, fs, null, null, null, false);//working
+            var s = KeplerSpline.keplerSplineV2(ts, fs, null, null, null, null, null, false);//working
             //var s = KeplerSpline.keplerSplineV2(ts, fs, 2.3633148268427435, null, null, false);
             var s1 = KeplerSpline.chooseKeplerSplineV2(ts, fs);
             System.out.println(s1.first());
