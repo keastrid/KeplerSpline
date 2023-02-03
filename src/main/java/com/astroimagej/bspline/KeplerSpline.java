@@ -12,7 +12,7 @@ public class KeplerSpline {
     /**
      * In python, this handles sets of vectors. Here all vectors must be combined first
      */
-    private static Pair<LinkedHashSet<RealVector>, LinkedHashSet<RealVector>> split(RealVector allTime, RealVector allFlux, Double gapWidth) {
+    private static Pair<LinkedList<RealVector>, LinkedList<RealVector>> split(RealVector allTime, RealVector allFlux, Double gapWidth) {
         if (!Util.shapeMatches(allFlux, allTime)) {
             throw new IllegalArgumentException("Shapes must match.");
         }
@@ -21,8 +21,8 @@ public class KeplerSpline {
             gapWidth = 0.75;
         }
 
-        var outTime = new LinkedHashSet<RealVector>();
-        var outFlux = new LinkedHashSet<RealVector>();
+        var outTime = new LinkedList<RealVector>();
+        var outFlux = new LinkedList<RealVector>();
 
         var start = 0;
         for (int end = 1; end < allTime.getDimension() + 1; end++) {
@@ -31,6 +31,10 @@ public class KeplerSpline {
                 outFlux.add(allFlux.getSubVector(start, end-start));
                 start = end;
             }
+        }
+
+        if (outTime.size() != outFlux.size()) {
+            throw new IllegalStateException("Failed to split correctly");
         }
 
         return new Pair<>(outTime, outFlux);
