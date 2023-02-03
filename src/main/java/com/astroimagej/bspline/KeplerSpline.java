@@ -188,8 +188,8 @@ public class KeplerSpline {
             var nPoints= 0;
             var ssr = 0D;
 
-            var spline = new LinkedHashSet<RealVector>();
-            var lightCurveMask = new LinkedHashSet<RealVector>();
+            var spline = new LinkedList<RealVector>();
+            var lightCurveMask = new LinkedList<RealVector>();
             var badBkSpace = false;
 
             RealVector splinePiece;
