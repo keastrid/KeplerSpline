@@ -26,7 +26,7 @@ public class KeplerSpline {
 
         var start = 0;
         for (int end = 1; end < allTime.getDimension() + 1; end++) {
-            if (end == allTime.getDimension() || allTime.getEntry(end) - allTime.getEntry(end-1) > gapWidth) {
+            if (end == allTime.getDimension() || Math.abs(allTime.getEntry(end) - allTime.getEntry(end-1)) > gapWidth) {
                 outTime.add(allTime.getSubVector(start, end-start));
                 outFlux.add(allFlux.getSubVector(start, end-start));
                 start = end;
